@@ -31,10 +31,16 @@ Current mapping:
 - `Applied-Mathematics-II/index.html` -> `data-bg-mode="parametric"`
 - Vibe: parametric/Lissajous motion
 
-3. All 8 unit pages (shared style):
-- `Applied-Mathematics-I/unit-1..4.html` -> `data-bg-mode="vector-field"`
-- `Applied-Mathematics-II/unit-1..4.html` -> `data-bg-mode="vector-field"`
-- Vibe: computational flow field + tracers
+3. All 8 unit pages (all unique):
+- `Applied-Mathematics-I/unit-1.html` -> `vector-field`
+- `Applied-Mathematics-I/unit-2.html` -> `contour`
+- `Applied-Mathematics-I/unit-3.html` -> `orbit-rings`
+- `Applied-Mathematics-I/unit-4.html` -> `radar`
+- `Applied-Mathematics-II/unit-1.html` -> `matrix`
+- `Applied-Mathematics-II/unit-2.html` -> `particles`
+- `Applied-Mathematics-II/unit-3.html` -> `math-grid`
+- `Applied-Mathematics-II/unit-4.html` -> `parametric`
+- Vibe: each unit has a distinct technical/math motion identity
 
 ### Unit app JS layers
 
@@ -153,4 +159,4 @@ Use this exact order for one unit (example: `am1-unit-1`) and then repeat for ot
 3. In `charts.js`, tweak colors or chart options and refresh.
 4. In `storage.js`, clear saved data manually and see reset behavior.
 5. In `theme.css`, change one palette variable and observe global impact.
-6. In a page HTML file, change `data-bg-mode` (`math-grid`, `parametric`, `vector-field`, `particles`) and observe the result.
+6. In a page HTML file, change `data-bg-mode` (`math-grid`, `parametric`, `vector-field`, `particles`, `contour`, `orbit-rings`, `radar`, `matrix`) and observe the result.
