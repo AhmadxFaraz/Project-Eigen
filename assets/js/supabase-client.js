@@ -2,7 +2,11 @@
   let client = null;
 
   function isConfigured() {
-    return Boolean(window.SUPABASE_URL && window.SUPABASE_ANON_KEY && window.supabase);
+    const url = window.SUPABASE_URL || '';
+    const key = window.SUPABASE_ANON_KEY || '';
+    const hasRealUrl = /^https:\/\/.+\.supabase\.co$/.test(url);
+    const hasRealKey = key.length > 20;
+    return Boolean(hasRealUrl && hasRealKey && window.supabase);
   }
 
   function getClient() {

@@ -14,8 +14,9 @@
 
   async function signUp(email, password) {
     const client = window.SupabaseClient.getClient();
-    const { error } = await client.auth.signUp({ email, password });
+    const { data, error } = await client.auth.signUp({ email, password });
     if (error) throw error;
+    return data;
   }
 
   async function signOut() {
@@ -43,7 +44,7 @@
 
   async function initAuthPage() {
     if (!window.SupabaseClient.isConfigured()) {
-      setStatus('Set SUPABASE_URL and SUPABASE_ANON_KEY in assets/js/supabase-config.js', true);
+      setStatus('Set valid SUPABASE_URL + SUPABASE_ANON_KEY in assets/js/supabase-config.js', true);
       return;
     }
 
@@ -54,7 +55,7 @@
 
     if (!form || !signInBtn || !signUpBtn || !signOutBtn) return;
 
-    async function submit(handler) {
+    async function submit(mode, handler) {
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
       if (!email || !password) {
@@ -62,9 +63,20 @@
         return;
       }
 
+      if (password.length < 6) {
+        setStatus('Password must be at least 6 characters.', true);
+        return;
+      }
+
       try {
-        await handler(email, password);
-        setStatus('Success.');
+        const result = await handler(email, password);
+        if (mode === 'signup' && result && !result.session) {
+          setStatus('Signup successful. Check your email inbox to confirm, then sign in.');
+        } else if (mode === 'signin') {
+          setStatus('Signed in successfully.');
+        } else {
+          setStatus('Success.');
+        }
         await refreshUserView();
       } catch (err) {
         setStatus(err.message || 'Auth failed.', true);
@@ -72,11 +84,11 @@
     }
 
     signInBtn.addEventListener('click', function () {
-      submit(signIn);
+      submit('signin', signIn);
     });
 
     signUpBtn.addEventListener('click', function () {
-      submit(signUp);
+      submit('signup', signUp);
     });
 
     signOutBtn.addEventListener('click', async function () {
@@ -87,7 +99,7 @@
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      submit(signIn);
+      submit('signin', signIn);
     });
 
     const client = window.SupabaseClient.getClient();
