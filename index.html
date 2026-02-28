@@ -1,140 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Pathways | Dashboard</title>
-    <style>
-        :root {
-            --bg: #0f172a;
-            --card-bg: #1e293b;
-            --accent: #2dd4bf; /* Teal color from your tracker */
-            --text: #f8fafc;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Math Pathways | Dashboard</title>
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 40px 20px;
-        }
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-        header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
-        h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        p { color: #94a3b8; }
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
 
-        .pathway-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+    .mono { font-family: 'JetBrains Mono', monospace; }
 
-        .subject-card {
-            background: var(--card-bg);
-            border: 1px solid #334155;
-            border-radius: 16px;
-            padding: 25px;
-            text-decoration: none;
-            color: inherit;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+    /* Glow effect */
+    .glow:hover {
+      box-shadow: 0 0 25px rgba(59,130,246,0.4);
+      transform: translateY(-6px);
+    }
 
-        .subject-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-            box-shadow: 0 10px 30px -10px rgba(45, 212, 191, 0.2);
-        }
+    /* Animated gradient border */
+    .animated-border {
+      position: relative;
+      background: #1e293b;
+      border-radius: 1rem;
+    }
 
-        .subject-card h3 {
-            margin: 0 0 15px 0;
-            font-size: 1.4rem;
-            color: var(--accent);
-        }
+    .animated-border::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: 1rem;
+      padding: 1px;
+      background: linear-gradient(45deg,#3b82f6,#22d3ee,#6366f1,#3b82f6);
+      background-size: 300% 300%;
+      animation: borderFlow 6s linear infinite;
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+    }
 
-        .status-badge {
-            font-size: 0.8rem;
-            background: rgba(45, 212, 191, 0.1);
-            color: var(--accent);
-            padding: 4px 12px;
-            border-radius: 20px;
-            width: fit-content;
-            margin-bottom: 20px;
-        }
+    @keyframes borderFlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
 
-        .btn-view {
-            margin-top: 20px;
-            text-align: right;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-    </style>
+    /* Canvas background */
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+  </style>
 </head>
-<body>
+<body class="text-slate-100">
 
-    <header>
-        <h1>Math Pathways</h1>
-        <p>Select a subject to track your exam readiness</p>
-    </header>
+<canvas id="bgCanvas"></canvas>
 
-    <div class="pathway-grid">
-        <a href="applied-math-1.html" class="subject-card">
-            <div>
-                <div class="status-badge">4 Chapters</div>
-                <h3>Applied Mathematics 1</h3>
-            </div>
-            <div class="btn-view">View Progress →</div>
-        </a>
+<!-- Header -->
+<header class="text-center py-16 px-4">
+  <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight">
+    <span class="text-blue-500">Math</span> Pathways
+  </h1>
+  <p class="mt-4 text-slate-400 mono text-sm md:text-base">
+    // track.progress(); optimize.yourself();
+  </p>
+</header>
 
-        <a href="applied-math-2.html" class="subject-card">
-            <div>
-                <div class="status-badge">4 Chapters</div>
-                <h3>Applied Mathematics 2</h3>
-            </div>
-            <div class="btn-view">View Progress →</div>
-        </a>
+<!-- Grid -->
+<section class="max-w-6xl mx-auto px-6 pb-20 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
 
-        <a href="higher-math.html" class="subject-card">
-            <div>
-                <div class="status-badge">Core Subject</div>
-                <h3>Higher Mathematics</h3>
-            </div>
-            <div class="btn-view">View Progress →</div>
-        </a>
-
-        <a href="numerical-math.html" class="subject-card">
-            <div>
-                <div class="status-badge">Computational</div>
-                <h3>Numerical Mathematics</h3>
-            </div>
-            <div class="btn-view">View Progress →</div>
-        </a>
-
-        <a href="stats-ml.html" class="subject-card">
-            <div>
-                <div class="status-badge">AI/ML Track</div>
-                <h3>Probability & Stats for ML</h3>
-            </div>
-            <div class="btn-view">View Progress →</div>
-        </a>
-
-        <a href="linear-algebra.html" class="subject-card">
-            <div>
-                <div class="status-badge">Advanced</div>
-                <h3>Linear Algebra for ML & AI</h3>
-            </div>
-            <div class="btn-view">View Progress →</div>
-        </a>
+  <!-- Card -->
+  <a href="applied-math-1.html" class="animated-border glow p-6 transition duration-300">
+    <div class="flex justify-between items-center mb-4">
+      <span class="text-xs mono text-blue-400">AMS-1</span>
+      <span class="text-xs bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full">4 Chapters</span>
     </div>
+    <h3 class="text-xl font-semibold mb-2">Applied Mathematics 1</h3>
+    <p class="text-slate-400 text-sm">Core foundations for engineering calculus.</p>
+  </a>
+
+  <a href="applied-math-2.html" class="animated-border glow p-6 transition duration-300">
+    <div class="flex justify-between items-center mb-4">
+      <span class="text-xs mono text-indigo-400">AMS-2</span>
+      <span class="text-xs bg-indigo-500/20 text-indigo-400 px-3 py-1 rounded-full">4 Chapters</span>
+    </div>
+    <h3 class="text-xl font-semibold mb-2">Applied Mathematics 2</h3>
+    <p class="text-slate-400 text-sm">Advanced calculus and transformations.</p>
+  </a>
+
+  <a href="higher-math.html" class="animated-border glow p-6 transition duration-300">
+    <div class="flex justify-between items-center mb-4">
+      <span class="text-xs mono text-purple-400">HM</span>
+      <span class="text-xs bg-purple-500/20 text-purple-400 px-3 py-1 rounded-full">Core</span>
+    </div>
+    <h3 class="text-xl font-semibold mb-2">Higher Mathematics</h3>
+    <p class="text-slate-400 text-sm">Theoretical backbone of problem solving.</p>
+  </a>
+
+  <a href="numerical-math.html" class="animated-border glow p-6 transition duration-300">
+    <div class="flex justify-between items-center mb-4">
+      <span class="text-xs mono text-teal-400">NM</span>
+      <span class="text-xs bg-teal-500/20 text-teal-400 px-3 py-1 rounded-full">Computational</span>
+    </div>
+    <h3 class="text-xl font-semibold mb-2">Numerical Mathematics</h3>
+    <p class="text-slate-400 text-sm">Algorithms and numerical methods.</p>
+  </a>
+
+  <a href="stats-ml.html" class="animated-border glow p-6 transition duration-300">
+    <div class="flex justify-between items-center mb-4">
+      <span class="text-xs mono text-emerald-400">ML</span>
+      <span class="text-xs bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full">AI Track</span>
+    </div>
+    <h3 class="text-xl font-semibold mb-2">Probability & Stats</h3>
+    <p class="text-slate-400 text-sm">Statistical foundation for ML systems.</p>
+  </a>
+
+  <a href="linear-algebra.html" class="animated-border glow p-6 transition duration-300">
+    <div class="flex justify-between items-center mb-4">
+      <span class="text-xs mono text-cyan-400">LA</span>
+      <span class="text-xs bg-cyan-500/20 text-cyan-400 px-3 py-1 rounded-full">Advanced</span>
+    </div>
+    <h3 class="text-xl font-semibold mb-2">Linear Algebra</h3>
+    <p class="text-slate-400 text-sm">Vectors, matrices, eigen-everything.</p>
+  </a>
+
+</section>
+
+<script>
+  const canvas = document.getElementById("bgCanvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let particles = [];
+  const particleCount = 120;
+
+  for (let i = 0; i < particleCount; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 1.4,
+      vy: (Math.random() - 0.5) * 1.4
+    });
+  }
+  let mouse = { x: null, y: null };
+
+  window.addEventListener("mousemove", (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+
+  function draw() {
+  ctx.fillStyle = "#0f172a";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < particleCount; i++) {
+      let p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // replace bounce checks with wrap
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width) p.x = 0;
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+
+      // modify inside draw loop
+      ctx.fillStyle = "#22d3ee"; // particle color
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 3, 0, Math.PI * 2); // radius 3
+      ctx.fill();
+      
+      // connection
+      ctx.strokeStyle = "rgba(34,211,238,0.12)";
+
+      for (let j = i + 1; j < particleCount; j++) {
+        let p2 = particles[j];
+        let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+        if (dist < 120) {
+          ctx.strokeStyle = "rgba(59,130,246,0.15)";
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+
+  window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+</script>
 
 </body>
 </html>
