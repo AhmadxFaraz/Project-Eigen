@@ -27,6 +27,15 @@
             max-height: 300px;
         }
 
+        .task-checkbox {
+            width: 1.1rem;
+            height: 1.1rem;
+            min-width: 1.1rem;
+            min-height: 1.1rem;
+            flex: 0 0 1.1rem;
+            accent-color: #22d3ee;
+        }
+
         .task-checkbox:checked + div {
             text-decoration: line-through;
             color: #9CA3AF;
@@ -494,7 +503,7 @@
                                     return `
                                     <label class="flex items-start space-x-3 cursor-pointer group">
                                         <input type="checkbox" 
-                                            class="task-checkbox form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 transition duration-150 ease-in-out mt-0.5" 
+                                            class="task-checkbox form-checkbox shrink-0 text-blue-600 rounded border-gray-300 focus:ring-blue-500 transition duration-150 ease-in-out mt-0.5" 
                                             ${task.completed ? 'checked' : ''} 
                                             onchange="app.toggleTask(${tIndex}, ${originalIndex})"
                                         >
