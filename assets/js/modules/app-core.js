@@ -3,6 +3,18 @@
     const storageKey = config.storageKey;
     const seedData = config.studyData;
 
+    async function tryCloudPull(app) {
+      if (!window.TrackerCloud || !window.TrackerCloud.pull) return;
+      const remote = await window.TrackerCloud.pull(storageKey);
+      if (!remote) return;
+
+      app.data = remote;
+      window.TrackerStorage.save(storageKey, app.data);
+      window.TrackerUI.renderTasks(app);
+      app.updateStats();
+      window.TrackerCharts.update(app);
+    }
+
     return {
       data: window.TrackerStorage.load(storageKey, seedData),
       filter: 'all',
@@ -13,10 +25,14 @@
         window.TrackerUI.renderTasks(this);
         this.charts = window.TrackerCharts.init(this);
         this.updateStats();
+        tryCloudPull(this);
       },
 
       save: function () {
         window.TrackerStorage.save(storageKey, this.data);
+        if (window.TrackerCloud && window.TrackerCloud.push) {
+          window.TrackerCloud.push(storageKey, this.data);
+        }
         this.updateStats();
         window.TrackerCharts.update(this);
       },

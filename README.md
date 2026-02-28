@@ -29,6 +29,8 @@ Current mapping:
 ### Unit app JS layers
 
 - `assets/js/modules/storage.js`: localStorage load/save
+- `assets/js/modules/cloud-sync.js`: cloud pull/push per storage key (Supabase)
+- `assets/js/modules/auth-ui.js`: login page auth interactions
 - `assets/js/modules/charts.js`: Chart.js init/update
 - `assets/js/modules/ui.js`: DOM rendering + filter button UI + motivation text
 - `assets/js/modules/app-core.js`: app factory (business flow)
@@ -48,6 +50,65 @@ Each unit page loads JS in this order:
 7. `am*-unit-*.main.js`
 
 Why this order: each layer depends on the previous one being available.
+
+## Cloud login + sync setup (cross-device history)
+
+This is implemented with Supabase Auth + Postgres.
+
+### 1) Configure project keys
+
+Edit:
+- `assets/js/supabase-config.js`
+
+Set:
+- `window.SUPABASE_URL`
+- `window.SUPABASE_ANON_KEY`
+
+### 2) Create table for progress
+
+Run this SQL in Supabase SQL Editor:
+
+```sql
+create table if not exists public.tracker_progress (
+  user_id uuid not null references auth.users(id) on delete cascade,
+  storage_key text not null,
+  data jsonb not null,
+  updated_at timestamptz not null default now(),
+  primary key (user_id, storage_key)
+);
+```
+
+### 3) Enable RLS and user-only access
+
+```sql
+alter table public.tracker_progress enable row level security;
+
+create policy "Users can read own progress"
+on public.tracker_progress
+for select
+to authenticated
+using (auth.uid() = user_id);
+
+create policy "Users can write own progress"
+on public.tracker_progress
+for insert
+to authenticated
+with check (auth.uid() = user_id);
+
+create policy "Users can update own progress"
+on public.tracker_progress
+for update
+to authenticated
+using (auth.uid() = user_id)
+with check (auth.uid() = user_id);
+```
+
+### 4) Use login page
+
+- Open `login.html`
+- Sign up / sign in
+- Open any unit page and progress will sync to cloud automatically
+- On a new device: sign in and your saved progress is restored
 
 ## 3) How data flows for each action
 

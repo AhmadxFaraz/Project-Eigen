@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Preparation Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/theme.css" />
+</head>
+<body class="theme-page text-slate-100 min-h-screen flex items-center justify-center p-6">
+  <canvas id="bgCanvas" data-bg-mode="particles" data-particle-count="120" data-particle-size="2.8" data-particle-speed="1" data-link-distance="120"></canvas>
+
+  <main class="animated-border max-w-md w-full p-7">
+    <p class="mono text-xs text-cyan-300 tracking-widest uppercase">Account</p>
+    <h1 class="text-3xl font-extrabold mt-2">Login / Sign Up</h1>
+    <p class="text-slate-300 mt-3 text-sm">Use your account to sync preparation progress across devices.</p>
+
+    <div id="auth-user" class="mt-4 text-sm text-slate-300">Checking session...</div>
+
+    <form id="auth-form" class="mt-4 space-y-3">
+      <input id="email" type="email" placeholder="Email" class="w-full rounded-lg bg-slate-900/70 border border-slate-700 px-3 py-2 text-sm outline-none focus:border-cyan-400" />
+      <input id="password" type="password" placeholder="Password" class="w-full rounded-lg bg-slate-900/70 border border-slate-700 px-3 py-2 text-sm outline-none focus:border-cyan-400" />
+      <div class="flex gap-2">
+        <button id="signin-btn" type="button" class="flex-1 rounded-lg bg-cyan-500/20 text-cyan-300 px-3 py-2 text-sm font-semibold">Sign In</button>
+        <button id="signup-btn" type="button" class="flex-1 rounded-lg bg-emerald-500/20 text-emerald-300 px-3 py-2 text-sm font-semibold">Sign Up</button>
+      </div>
+    </form>
+
+    <div id="auth-actions" class="hidden mt-4">
+      <button id="signout-btn" type="button" class="w-full rounded-lg bg-amber-500/20 text-amber-300 px-3 py-2 text-sm font-semibold">Sign Out</button>
+    </div>
+
+    <div id="auth-status" class="text-slate-400 text-sm mt-3"></div>
+
+    <a href="index.html" class="inline-block mt-6 text-xs mono text-cyan-300 hover:text-cyan-200">← Back to Dashboard</a>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/theme.js?v=2"></script>
+  <script src="assets/js/supabase-config.js"></script>
+  <script src="assets/js/supabase-client.js"></script>
+  <script src="assets/js/modules/cloud-sync.js"></script>
+  <script src="assets/js/modules/auth-ui.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      window.AuthUI.initAuthPage();
+    });
+  </script>
+</body>
+</html>
