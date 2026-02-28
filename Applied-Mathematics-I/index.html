@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Applied Mathematics 1 | Math Pathways</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    .glow:hover {
+      box-shadow: 0 0 25px rgba(99,102,241,0.35);
+      transform: translateY(-6px);
+    }
+
+    .animated-border {
+      position: relative;
+      background: #1e293b;
+      border-radius: 1rem;
+    }
+
+    .animated-border::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: 1rem;
+      padding: 1px;
+      background: linear-gradient(45deg,#6366f1,#22d3ee,#3b82f6,#6366f1);
+      background-size: 300% 300%;
+      animation: borderFlow 6s linear infinite;
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+    }
+
+    @keyframes borderFlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body class="text-slate-100">
+
+<canvas id="bgCanvas"></canvas>
+
+<header class="text-center py-16 px-4">
+  <p class="mono text-xs md:text-sm text-indigo-300 tracking-widest uppercase">Course Track</p>
+  <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mt-2">
+    Applied Mathematics <span class="text-indigo-400">I</span>
+  </h1>
+  <p class="mt-4 text-slate-400 mono text-sm md:text-base">
+    // build.foundations(); solve.systematically();
+  </p>
+
+  <a href="../index.html" class="inline-block mt-8 animated-border glow px-5 py-2 text-sm mono transition duration-300">
+    ← Back to Dashboard
+  </a>
+</header>
+
+<section class="max-w-5xl mx-auto px-6 pb-20 grid gap-8 sm:grid-cols-2">
+  <a href="unit-1.html" class="animated-border glow p-6 transition duration-300">
+    <div class="flex justify-between items-center mb-4">
+      <span class="text-xs mono text-indigo-300">UNIT 1</span>
+      <span class="text-xs bg-indigo-500/20 text-indigo-300 px-3 py-1 rounded-full">Differentiation</span>
+    </div>
+    <h3 class="text-xl font-semibold mb-2">Linear Algebra</h3>
+    <p class="text-slate-400 text-sm">Matrices, vector spaces, eigen systems, and Cayley-Hamilton.</p>
+  </a>
+
+  <a href="unit-2.html" class="animated-border glow p-6 transition duration-300">
+    <div class="flex justify-between items-center mb-4">
+      <span class="text-xs mono text-cyan-300">UNIT 2</span>
+      <span class="text-xs bg-cyan-500/20 text-cyan-300 px-3 py-1 rounded-full">Integration</span>
+    </div>
+    <h3 class="text-xl font-semibold mb-2">Ordinary Differential Equations</h3>
+    <p class="text-slate-400 text-sm">First-order to higher-order ODEs and physical applications.</p>
+  </a>
+
+  <a href="unit-3.html" class="animated-border glow p-6 transition duration-300">
+    <div class="flex justify-between items-center mb-4">
+      <span class="text-xs mono text-blue-300">UNIT 3</span>
+      <span class="text-xs bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full">Transforms</span>
+    </div>
+    <h3 class="text-xl font-semibold mb-2">Differential Calculus & Series</h3>
+    <p class="text-slate-400 text-sm">Curve tracing, asymptotes, expansions, and convergence tests.</p>
+  </a>
+
+  <a href="unit-4.html" class="animated-border glow p-6 transition duration-300">
+    <div class="flex justify-between items-center mb-4">
+      <span class="text-xs mono text-sky-300">UNIT 4</span>
+      <span class="text-xs bg-sky-500/20 text-sky-300 px-3 py-1 rounded-full">Signals</span>
+    </div>
+    <h3 class="text-xl font-semibold mb-2">Integration & Applications</h3>
+    <p class="text-slate-400 text-sm">Improper integrals, Beta/Gamma functions, arc length, and solids.</p>
+  </a>
+</section>
+
+<script>
+  const canvas = document.getElementById("bgCanvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const particles = [];
+  const particleCount = 120;
+
+  for (let i = 0; i < particleCount; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 1,
+      vy: (Math.random() - 0.5) * 1
+    });
+  }
+
+  function draw() {
+    ctx.fillStyle = "#0f172a";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < particleCount; i++) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width) p.x = 0;
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+
+      ctx.fillStyle = "#22d3ee";
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      for (let j = i + 1; j < particleCount; j++) {
+        const p2 = particles[j];
+        const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+        if (dist < 120) {
+          ctx.strokeStyle = "rgba(59,130,246,0.15)";
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+
+  window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+</script>
+
+</body>
+</html>
