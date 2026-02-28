@@ -12,7 +12,29 @@ This project is intentionally split so you can learn how HTML, CSS, and JavaScri
 
 - `assets/theme.css`: global colors, shared components, theme tokens
 - `assets/css/unit-dashboard.css`: unit-page specific utility styles
-- `assets/theme.js`: background particle animation + theme palette object
+- `assets/theme.js`: multi-mode background animation engine + theme palette object
+
+## Animation mode map
+
+Background animation is selected per page using:
+
+- `<canvas id="bgCanvas" data-bg-mode="...">`
+
+Current mapping:
+
+1. Dashboard index:
+- `index.html` -> `data-bg-mode="math-grid"`
+- Vibe: dynamic engineering grid + harmonic curves
+
+2. Course index pages (shared style):
+- `Applied-Mathematics-I/index.html` -> `data-bg-mode="parametric"`
+- `Applied-Mathematics-II/index.html` -> `data-bg-mode="parametric"`
+- Vibe: parametric/Lissajous motion
+
+3. All 8 unit pages (shared style):
+- `Applied-Mathematics-I/unit-1..4.html` -> `data-bg-mode="vector-field"`
+- `Applied-Mathematics-II/unit-1..4.html` -> `data-bg-mode="vector-field"`
+- Vibe: computational flow field + tracers
 
 ### Unit app JS layers
 
@@ -122,7 +144,7 @@ Use this exact order for one unit (example: `am1-unit-1`) and then repeat for ot
 8. Open shared theme files:
 - `assets/theme.css`
 - `assets/theme.js`
-- Goal: understand visual system and particle background behavior.
+- Goal: understand visual system and mode-based background behavior.
 
 ### Suggested mini-practice
 
@@ -131,3 +153,4 @@ Use this exact order for one unit (example: `am1-unit-1`) and then repeat for ot
 3. In `charts.js`, tweak colors or chart options and refresh.
 4. In `storage.js`, clear saved data manually and see reset behavior.
 5. In `theme.css`, change one palette variable and observe global impact.
+6. In a page HTML file, change `data-bg-mode` (`math-grid`, `parametric`, `vector-field`, `particles`) and observe the result.
