@@ -458,7 +458,7 @@
   }
 
   function createRenderer(mode, canvas, ctx) {
-    if (mode === 'math-grid') return createMathGridRenderer(canvas, ctx);
+    if (mode === 'math-grid' || mode === 'grid-oscilloscope') return createMathGridRenderer(canvas, ctx);
     if (mode === 'parametric') return createParametricRenderer(canvas, ctx);
     if (mode === 'vector-field') return createVectorFieldRenderer(canvas, ctx);
     if (mode === 'contour') return createContourRenderer(canvas, ctx);
