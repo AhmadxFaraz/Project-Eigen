@@ -11,7 +11,7 @@
           labels: ['Completed', 'Remaining'],
           datasets: [{
             data: [0, 100],
-            backgroundColor: [window.ThemePalette.emerald, window.ThemePalette.border],
+            backgroundColor: ['#34d399', '#334155'],
             borderWidth: 0,
             hoverOffset: 4
           }]
@@ -38,13 +38,13 @@
             {
               label: 'Completed',
               data: [],
-              backgroundColor: window.ThemePalette.cyan,
+              backgroundColor: '#38bdf8',
               borderRadius: 4
             },
             {
               label: 'Total Tasks',
               data: [],
-              backgroundColor: window.ThemePalette.surface,
+              backgroundColor: '#475569',
               borderRadius: 4,
               grouped: false
             }
