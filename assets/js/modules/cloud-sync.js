@@ -1,9 +1,21 @@
 (function () {
   async function getUser() {
-    const client = window.SupabaseClient && window.SupabaseClient.getClient();
-    if (!client) return null;
-    const { data } = await client.auth.getUser();
-    return data && data.user ? data.user : null;
+    try {
+      const client = window.SupabaseClient && window.SupabaseClient.getClient();
+      if (!client) return null;
+
+      const sessionResult = await client.auth.getSession();
+      const sessionUser = sessionResult && sessionResult.data && sessionResult.data.session
+        ? sessionResult.data.session.user
+        : null;
+      if (sessionUser) return sessionUser;
+
+      const userResult = await client.auth.getUser();
+      return userResult && userResult.data && userResult.data.user ? userResult.data.user : null;
+    } catch (err) {
+      console.error('Auth user fetch failed:', err && err.message ? err.message : err);
+      return null;
+    }
   }
 
   async function pull(storageKey) {
@@ -34,10 +46,10 @@
 
   async function push(storageKey, trackerData) {
     const client = window.SupabaseClient && window.SupabaseClient.getClient();
-    if (!client) return;
+    if (!client) return false;
 
     const user = await getUser();
-    if (!user) return;
+    if (!user) return false;
 
     const { error } = await client.from('tracker_progress').upsert(
       {
@@ -51,7 +63,10 @@
 
     if (error) {
       console.error('Cloud push failed:', error.message);
+      return false;
     }
+
+    return true;
   }
 
   window.TrackerCloud = {

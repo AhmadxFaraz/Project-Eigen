@@ -33,6 +33,19 @@
       return completed;
     }
 
+    async function pushWithRetry(storageKeyValue, data, tries) {
+      if (!window.TrackerCloud || !window.TrackerCloud.push) return false;
+      const maxTries = typeof tries === 'number' ? tries : 3;
+      for (let attempt = 1; attempt <= maxTries; attempt++) {
+        const ok = await window.TrackerCloud.push(storageKeyValue, data);
+        if (ok) return true;
+        await new Promise(function (resolve) {
+          setTimeout(resolve, attempt * 500);
+        });
+      }
+      return false;
+    }
+
     async function tryCloudPull(app) {
       if (!window.TrackerCloud || !window.TrackerCloud.pull) return;
       const remote = await window.TrackerCloud.pull(storageKey);
@@ -55,13 +68,13 @@
         }
 
         // Local snapshot is newer than cloud; push it.
-        await window.TrackerCloud.push(storageKey, app.data);
+        await pushWithRetry(storageKey, app.data, 3);
         return;
       }
 
       // If cloud has no row for this unit, seed only when local has real progress.
       if (countCompleted(app.data) > 0) {
-        await window.TrackerCloud.push(storageKey, app.data);
+        await pushWithRetry(storageKey, app.data, 3);
       }
     }
 
@@ -83,6 +96,11 @@
       setTimeout(function () {
         tryCloudPull(app);
       }, 1800);
+
+      // Keep page updated if progress was changed from another device while this page is open.
+      setInterval(function () {
+        tryCloudPull(app);
+      }, 15000);
     }
 
     function saveLocalState(data) {
@@ -109,7 +127,7 @@
       save: function () {
         saveLocalState(this.data);
         if (window.TrackerCloud && window.TrackerCloud.push) {
-          window.TrackerCloud.push(storageKey, this.data);
+          pushWithRetry(storageKey, this.data, 3);
         }
         this.updateStats();
         window.TrackerCharts.update(this);
