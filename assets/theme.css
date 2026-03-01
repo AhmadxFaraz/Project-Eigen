@@ -193,6 +193,12 @@
   transition: all 0.2s ease;
 }
 
+.about-bottom-left .site-about-link {
+  top: auto;
+  bottom: 16px;
+  left: 16px;
+}
+
 .site-about-link:hover {
   border-color: rgba(255, 255, 255, 0.5);
   color: #ffffff;
@@ -226,6 +232,12 @@
     top: 12px;
     left: 12px;
     padding: 4px 8px;
+  }
+
+  .about-bottom-left .site-about-link {
+    top: auto;
+    bottom: 10px;
+    left: 12px;
   }
 
   .site-github-link {
