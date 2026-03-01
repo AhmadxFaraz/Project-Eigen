@@ -127,6 +127,10 @@ with check (auth.uid() = user_id);
   - Logging in from another device restores the same AMS-I Unit-2 state.
 - Clearing browser history/cache does not delete cloud progress.
 - Progress changes only if user updates tasks or presses Reset.
+- Sync conflict rule:
+  - Local and cloud snapshots are compared using write timestamps.
+  - Newer snapshot wins automatically (prevents stale browser state from overwriting fresh data).
+  - Empty local state is not pushed to cloud unless user actually starts making progress.
 
 ## 3) How data flows for each action
 

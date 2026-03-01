@@ -15,7 +15,7 @@
 
     const { data, error } = await client
       .from('tracker_progress')
-      .select('data')
+      .select('data,updated_at')
       .eq('user_id', user.id)
       .eq('storage_key', storageKey)
       .maybeSingle();
@@ -25,7 +25,11 @@
       return null;
     }
 
-    return data ? data.data : null;
+    if (!data) return null;
+    return {
+      data: data.data,
+      updatedAt: data.updated_at || null
+    };
   }
 
   async function push(storageKey, trackerData) {

@@ -21,20 +21,75 @@
       return storage.deepCopy(seedData);
     }
 
+    function countCompleted(data) {
+      if (!Array.isArray(data)) return 0;
+      let completed = 0;
+      data.forEach(function (topic) {
+        if (!topic || !Array.isArray(topic.tasks)) return;
+        topic.tasks.forEach(function (task) {
+          if (task && task.completed) completed += 1;
+        });
+      });
+      return completed;
+    }
+
     async function tryCloudPull(app) {
       if (!window.TrackerCloud || !window.TrackerCloud.pull) return;
       const remote = await window.TrackerCloud.pull(storageKey);
-      if (remote) {
-        app.data = remote;
-        storage.save(storageKey, app.data);
-        window.TrackerUI.renderTasks(app);
-        app.updateStats();
-        window.TrackerCharts.update(app);
+      if (remote && remote.data) {
+        const localWriteAt = storage.getLocalWriteTime ? storage.getLocalWriteTime(storageKey) : null;
+        const remoteTime = remote.updatedAt ? Date.parse(remote.updatedAt) : 0;
+        const localTime = localWriteAt ? Date.parse(localWriteAt) : 0;
+
+        // Apply whichever version is newer. When no local timestamp exists, trust cloud.
+        if (!localWriteAt || remoteTime >= localTime) {
+          app.data = remote.data;
+          storage.save(storageKey, app.data);
+          if (storage.markLocalWrite && remote.updatedAt) {
+            storage.markLocalWrite(storageKey, remote.updatedAt);
+          }
+          window.TrackerUI.renderTasks(app);
+          app.updateStats();
+          window.TrackerCharts.update(app);
+          return;
+        }
+
+        // Local snapshot is newer than cloud; push it.
+        await window.TrackerCloud.push(storageKey, app.data);
         return;
       }
 
-      // If cloud has no data yet for this unit, seed it from local data.
-      await window.TrackerCloud.push(storageKey, app.data);
+      // If cloud has no row for this unit, seed only when local has real progress.
+      if (countCompleted(app.data) > 0) {
+        await window.TrackerCloud.push(storageKey, app.data);
+      }
+    }
+
+    function bindCloudAuthSync(app) {
+      if (!window.SupabaseClient || !window.SupabaseClient.isConfigured()) return;
+      const client = window.SupabaseClient.getClient();
+      if (!client || !client.auth) return;
+
+      // Re-sync on auth restoration/sign-in events.
+      client.auth.onAuthStateChange(function () {
+        tryCloudPull(app);
+      });
+
+      // Session hydration can lag on first load in some browsers.
+      setTimeout(function () {
+        tryCloudPull(app);
+      }, 600);
+
+      setTimeout(function () {
+        tryCloudPull(app);
+      }, 1800);
+    }
+
+    function saveLocalState(data) {
+      storage.save(storageKey, data);
+      if (storage.markLocalWrite) {
+        storage.markLocalWrite(storageKey);
+      }
     }
 
     return {
@@ -47,11 +102,12 @@
         window.TrackerUI.renderTasks(this);
         this.charts = window.TrackerCharts.init(this);
         this.updateStats();
+        bindCloudAuthSync(this);
         tryCloudPull(this);
       },
 
       save: function () {
-        storage.save(storageKey, this.data);
+        saveLocalState(this.data);
         if (window.TrackerCloud && window.TrackerCloud.push) {
           window.TrackerCloud.push(storageKey, this.data);
         }
