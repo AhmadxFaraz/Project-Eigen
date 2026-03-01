@@ -16,8 +16,10 @@
 
   function getAboutHref() {
     const path = window.location.pathname || '';
+    const inAboutDir = /\/about\//.test(path);
     const inSubDir = /\/Applied-Mathematics-I\/|\/Applied-Mathematics-II\//.test(path);
-    return inSubDir ? '../about.html' : 'about.html';
+    if (inAboutDir) return 'about.html';
+    return inSubDir ? '../about/about.html' : 'about/about.html';
   }
 
   function initGlobalNavLinks() {
