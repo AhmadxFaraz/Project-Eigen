@@ -1,10 +1,10 @@
 # Preparation-Tracker
 
-A vibe-coded, math/engineering-themed preparation tracker for Applied Mathematics (AMS I and AMS II), built to make syllabus completion visual, interactive, and cross-device.
+A vibe-coded, math/engineering-themed preparation tracker for multiple math sections, built to make syllabus completion visual, interactive, and cross-device.
 
 ## Overview
 
-Preparation-Tracker turns each AMS unit into a checklist dashboard with:
+Preparation-Tracker turns each unit into a checklist dashboard with:
 
 - topic-wise task tracking
 - completion charts
@@ -14,7 +14,8 @@ Preparation-Tracker turns each AMS unit into a checklist dashboard with:
 ## Key Features
 
 - Modular architecture with separated HTML, CSS, and JavaScript layers
-- 8 unit dashboards (4 for AMS I + 4 for AMS II)
+- 8 implemented unit dashboards (4 for AMS I + 4 for AMS II)
+- Structure ready to add more math sections beyond AMS
 - Real-time progress analytics (overall + topic-wise)
 - Filters: `All`, `To Do`, `Done`
 - Per-unit reset control

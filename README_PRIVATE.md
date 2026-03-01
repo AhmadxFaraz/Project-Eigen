@@ -2,6 +2,11 @@
 
 This file is for your personal learning and architecture understanding.
 
+Current status:
+
+- Implemented sections: AMS I and AMS II (8 units total)
+- Planned: additional Math sections to be added in the same architecture
+
 ## 1) What each language/file does
 
 - HTML: page structure + script/style imports
