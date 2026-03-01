@@ -1,8 +1,17 @@
 (function () {
+  let lastError = '';
+
+  function setLastError(message) {
+    lastError = message || '';
+  }
+
   async function getUser() {
     try {
       const client = window.SupabaseClient && window.SupabaseClient.getClient();
-      if (!client) return null;
+      if (!client) {
+        setLastError('Supabase client not configured.');
+        return null;
+      }
 
       const sessionResult = await client.auth.getSession();
       const sessionUser = sessionResult && sessionResult.data && sessionResult.data.session
@@ -13,7 +22,9 @@
       const userResult = await client.auth.getUser();
       return userResult && userResult.data && userResult.data.user ? userResult.data.user : null;
     } catch (err) {
-      console.error('Auth user fetch failed:', err && err.message ? err.message : err);
+      const msg = err && err.message ? err.message : String(err);
+      setLastError(`Auth user fetch failed: ${msg}`);
+      console.error('Auth user fetch failed:', msg);
       return null;
     }
   }
@@ -33,11 +44,16 @@
       .maybeSingle();
 
     if (error) {
+      setLastError(`Cloud pull failed: ${error.message}`);
       console.error('Cloud pull failed:', error.message);
       return null;
     }
 
-    if (!data) return null;
+    if (!data) {
+      setLastError('');
+      return null;
+    }
+    setLastError('');
     return {
       data: data.data,
       updatedAt: data.updated_at || null
@@ -46,10 +62,16 @@
 
   async function push(storageKey, trackerData) {
     const client = window.SupabaseClient && window.SupabaseClient.getClient();
-    if (!client) return false;
+    if (!client) {
+      setLastError('Supabase client not configured.');
+      return false;
+    }
 
     const user = await getUser();
-    if (!user) return false;
+    if (!user) {
+      setLastError('No signed-in user found on this page.');
+      return false;
+    }
 
     const { error } = await client.from('tracker_progress').upsert(
       {
@@ -62,16 +84,21 @@
     );
 
     if (error) {
+      setLastError(`Cloud push failed: ${error.message}`);
       console.error('Cloud push failed:', error.message);
       return false;
     }
 
+    setLastError('');
     return true;
   }
 
   window.TrackerCloud = {
     pull,
     push,
-    getUser
+    getUser,
+    getLastError: function () {
+      return lastError;
+    }
   };
 })();

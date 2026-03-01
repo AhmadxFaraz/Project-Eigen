@@ -33,21 +33,69 @@
       return completed;
     }
 
+    function ensureSyncBadge() {
+      let badge = document.getElementById('sync-status-badge');
+      if (badge) return badge;
+      badge = document.createElement('div');
+      badge.id = 'sync-status-badge';
+      badge.style.position = 'fixed';
+      badge.style.right = '12px';
+      badge.style.bottom = '12px';
+      badge.style.zIndex = '9999';
+      badge.style.padding = '6px 10px';
+      badge.style.borderRadius = '8px';
+      badge.style.fontSize = '12px';
+      badge.style.fontFamily = 'JetBrains Mono, monospace';
+      badge.style.background = 'rgba(8, 18, 36, 0.88)';
+      badge.style.border = '1px solid rgba(34, 211, 238, 0.45)';
+      badge.style.color = '#67e8f9';
+      badge.style.maxWidth = '320px';
+      badge.style.pointerEvents = 'none';
+      badge.textContent = 'Cloud Sync: checking...';
+      document.body.appendChild(badge);
+      return badge;
+    }
+
+    function setSyncStatus(text, isError) {
+      const badge = ensureSyncBadge();
+      badge.textContent = `Cloud Sync: ${text}`;
+      if (isError) {
+        badge.style.borderColor = 'rgba(248, 113, 113, 0.7)';
+        badge.style.color = '#fca5a5';
+      } else {
+        badge.style.borderColor = 'rgba(34, 211, 238, 0.45)';
+        badge.style.color = '#67e8f9';
+      }
+    }
+
     async function pushWithRetry(storageKeyValue, data, tries) {
       if (!window.TrackerCloud || !window.TrackerCloud.push) return false;
       const maxTries = typeof tries === 'number' ? tries : 3;
       for (let attempt = 1; attempt <= maxTries; attempt++) {
         const ok = await window.TrackerCloud.push(storageKeyValue, data);
-        if (ok) return true;
+        if (ok) {
+          setSyncStatus(`saved (attempt ${attempt})`, false);
+          return true;
+        }
         await new Promise(function (resolve) {
           setTimeout(resolve, attempt * 500);
         });
       }
+      const errorText = window.TrackerCloud.getLastError ? window.TrackerCloud.getLastError() : '';
+      setSyncStatus(errorText || 'save failed', true);
       return false;
     }
 
     async function tryCloudPull(app) {
       if (!window.TrackerCloud || !window.TrackerCloud.pull) return;
+      const user = await window.TrackerCloud.getUser();
+      if (!user) {
+        const errorText = window.TrackerCloud.getLastError ? window.TrackerCloud.getLastError() : '';
+        setSyncStatus(errorText || 'not signed in', true);
+        return;
+      }
+
+      setSyncStatus(`signed in as ${user.email}`, false);
       const remote = await window.TrackerCloud.pull(storageKey);
       if (remote && remote.data) {
         const localWriteAt = storage.getLocalWriteTime ? storage.getLocalWriteTime(storageKey) : null;
@@ -64,6 +112,7 @@
           window.TrackerUI.renderTasks(app);
           app.updateStats();
           window.TrackerCharts.update(app);
+          setSyncStatus('loaded from cloud', false);
           return;
         }
 
@@ -75,6 +124,8 @@
       // If cloud has no row for this unit, seed only when local has real progress.
       if (countCompleted(app.data) > 0) {
         await pushWithRetry(storageKey, app.data, 3);
+      } else {
+        setSyncStatus('no cloud data yet for this unit', false);
       }
     }
 
@@ -116,6 +167,7 @@
       charts: {},
 
       init: function () {
+        setSyncStatus('initializing...', false);
         window.TrackerUI.updateFilterButtons(this.filter);
         window.TrackerUI.renderTasks(this);
         this.charts = window.TrackerCharts.init(this);
