@@ -1,4 +1,15 @@
 (function () {
+  function normalizeError(err) {
+    if (!err) return 'Unknown error.';
+    if (typeof err === 'string') return err;
+    if (err.message) return err.message;
+    try {
+      return JSON.stringify(err);
+    } catch (_) {
+      return 'Unknown error.';
+    }
+  }
+
   function setStatus(text, isError) {
     const el = document.getElementById('auth-status');
     if (!el) return;
@@ -43,6 +54,11 @@
   }
 
   async function initAuthPage() {
+    if (window.location.protocol === 'file:') {
+      setStatus('Open this page via http://localhost or your deployed URL. file:// mode can break auth.', true);
+      return;
+    }
+
     if (!window.SupabaseClient.isConfigured()) {
       setStatus('Set valid SUPABASE_URL + SUPABASE_ANON_KEY in assets/js/supabase-config.js', true);
       return;
@@ -69,6 +85,7 @@
       }
 
       try {
+        setStatus('Processing...');
         const result = await handler(email, password);
         if (mode === 'signup' && result && !result.session) {
           setStatus('Signup successful. Check your email inbox to confirm, then sign in.');
@@ -79,7 +96,9 @@
         }
         await refreshUserView();
       } catch (err) {
-        setStatus(err.message || 'Auth failed.', true);
+        const message = normalizeError(err);
+        console.error('Auth error:', err);
+        setStatus(`Auth failed: ${message}`, true);
       }
     }
 
