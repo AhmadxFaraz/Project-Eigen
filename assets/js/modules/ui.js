@@ -18,6 +18,11 @@
     amber: 'bg-amber-500/15 text-amber-200 border border-amber-400/25'
   };
 
+  function safePercent(done, total) {
+    if (!total) return 0;
+    return Math.round((done / total) * 100);
+  }
+
   function updateFilterButtons(filterType) {
     ['all', 'incomplete', 'completed'].forEach(function (type) {
       const btn = document.getElementById(`btn-${type}`);
@@ -27,9 +32,6 @@
   }
 
   function updateStats(percent) {
-    const headerPercent = document.getElementById('header-percent');
-    if (headerPercent) headerPercent.textContent = `${percent}%`;
-
     const motivator = document.getElementById('motivation-text');
     if (!motivator) return;
 
@@ -40,6 +42,24 @@
     else if (percent < 80) motivator.textContent = '"Precision now. No careless gaps."';
     else if (percent < 100) motivator.textContent = '"The finish line is in sight. Stay steady."';
     else motivator.textContent = '"Prepared with clarity. Earn the result."';
+  }
+
+  function updateTypeProgress(typeCounts) {
+    const counts = typeCounts || {};
+    const theoryDone = counts.theoryDone || 0;
+    const theoryTotal = counts.theoryTotal || 0;
+    const problemDone = counts.problemDone || 0;
+    const problemTotal = counts.problemTotal || 0;
+
+    const theoryText = document.getElementById('theory-progress-text');
+    if (theoryText) {
+      theoryText.textContent = `Theory: ${theoryDone}/${theoryTotal} (${safePercent(theoryDone, theoryTotal)}%)`;
+    }
+
+    const problemText = document.getElementById('problem-progress-text');
+    if (problemText) {
+      problemText.textContent = `Problems: ${problemDone}/${problemTotal} (${safePercent(problemDone, problemTotal)}%)`;
+    }
   }
 
   function renderTasks(app) {
@@ -108,6 +128,7 @@
   window.TrackerUI = {
     renderTasks,
     updateFilterButtons,
-    updateStats
+    updateStats,
+    updateTypeProgress
   };
 })();

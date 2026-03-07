@@ -18,7 +18,7 @@
     <!-- Application Structure Plan: 
          The app is designed as a "Progress Dashboard". 
          1. Header: High-level course context and reset controls.
-         2. Analytics Section (Top): Visualizes progress immediately to motivate the user. Uses a Doughnut chart for overall completion and a Bar chart for topic-wise breakdown.
+         2. Analytics Section (Top): Visualizes progress immediately to motivate the user. Uses two Doughnut charts for overall completion and theory vs problem progress.
          3. Filter/Control Bar: Allows users to focus on what's left ("Incomplete") or review what's done.
          4. Topic Cards (Main Content): The syllabus is broken down into 5 distinct cards (Topics). Each card acts as a checklist container. 
             - Why Cards? They segment the dense list of problems into manageable chunks (Chunking Principle).
@@ -41,10 +41,6 @@
                 <button onclick="app.resetProgress()" class="text-sm text-red-500 hover:text-red-700 font-medium transition-colors px-3 py-2 rounded hover:bg-red-50">
                     Reset Progress
                 </button>
-                <div class="hidden sm:block text-right">
-                    <div class="text-xs text-gray-400 uppercase tracking-wide">Midsem Readiness</div>
-                    <div id="header-percent" class="text-xl font-bold text-emerald-500">0%</div>
-                </div>
             </div>
         </div>
     </header>
@@ -67,7 +63,7 @@
         <!-- Visualization Section -->
         <!-- Visualization & Content Choices:
              1. Overall Progress (Doughnut Chart): Goal -> Inform/Motivate. Shows 'Completed' vs 'Remaining' to give a quick sense of achievement.
-             2. Topic Breakdown (Bar Chart): Goal -> Compare/Organize. Shows the distribution of tasks across the 5 main topics and how much is done in each. Helps identify weak areas.
+             2. Theory vs Problem Breakdown (Doughnut Chart): Goal -> Inform/Balance. Shows completion and remaining work split by theory and problem tasks.
              3. Interaction: Charts update in real-time as checkboxes are clicked.
              CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
         -->
@@ -83,15 +79,16 @@
                 </div>
             </div>
 
-            <!-- Topic Breakdown Chart -->
+            <!-- Theory vs Problem Chart -->
             <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
-                <h3 class="text-gray-700 font-medium mb-4 w-full text-left border-b pb-2">Progress by Topic</h3>
+                <h3 class="text-gray-700 font-medium mb-4 w-full text-left border-b pb-2">Theory vs Problem Progress</h3>
                 <div class="chart-container">
-                    <canvas id="topicChart"></canvas>
+                    <canvas id="mixChart"></canvas>
                 </div>
-                <p class="mt-4 text-xs text-gray-400 text-center">
-                    Bars show total tasks vs. completed tasks per section.
-                </p>
+                <div class="mt-4 w-full text-xs text-gray-400 text-center space-y-1">
+                    <p id="theory-progress-text">Theory: 0/0 (0%)</p>
+                    <p id="problem-progress-text">Problems: 0/0 (0%)</p>
+                </div>
             </div>
         </section>
 
