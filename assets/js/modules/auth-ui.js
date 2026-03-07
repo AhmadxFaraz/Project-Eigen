@@ -81,11 +81,13 @@
 
   async function signUp(fullName, email, password) {
     const client = window.SupabaseClient.getClient();
+    const emailRedirectTo = getSignupRedirectUrl();
     const { data, error } = await client.auth.signUp({
       email,
       password,
       options: {
-        data: { full_name: fullName || '' }
+        data: { full_name: fullName || '' },
+        emailRedirectTo
       }
     });
     if (error) throw error;
@@ -114,6 +116,12 @@
     } catch (_) {
       return `${window.location.origin}/login.html`;
     }
+  }
+
+  function getSignupRedirectUrl() {
+    const explicit = String(window.SUPABASE_SIGNUP_REDIRECT_URL || '').trim();
+    if (explicit) return explicit;
+    return getPasswordResetRedirectUrl();
   }
 
   async function updatePassword(newPassword) {
