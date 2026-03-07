@@ -18,11 +18,6 @@
     amber: 'bg-amber-500/15 text-amber-200 border border-amber-400/25'
   };
 
-  function safePercent(done, total) {
-    if (!total) return 0;
-    return Math.round((done / total) * 100);
-  }
-
   function updateFilterButtons(filterType) {
     ['all', 'incomplete', 'completed'].forEach(function (type) {
       const btn = document.getElementById(`btn-${type}`);
@@ -44,22 +39,27 @@
     else motivator.textContent = '"Prepared with clarity. Earn the result."';
   }
 
-  function updateTypeProgress(typeCounts) {
-    const counts = typeCounts || {};
-    const theoryDone = counts.theoryDone || 0;
-    const theoryTotal = counts.theoryTotal || 0;
-    const problemDone = counts.problemDone || 0;
-    const problemTotal = counts.problemTotal || 0;
+  function updateTopicLegend(topicStats) {
+    const legend = document.getElementById('topic-progress-legend');
+    if (!legend) return;
 
-    const theoryText = document.getElementById('theory-progress-text');
-    if (theoryText) {
-      theoryText.textContent = `Theory: ${theoryDone}/${theoryTotal} (${safePercent(theoryDone, theoryTotal)}%)`;
+    const stats = Array.isArray(topicStats) ? topicStats : [];
+    if (!stats.length) {
+      legend.innerHTML = '<p class="text-xs text-gray-500 text-center">No topics available.</p>';
+      return;
     }
 
-    const problemText = document.getElementById('problem-progress-text');
-    if (problemText) {
-      problemText.textContent = `Problems: ${problemDone}/${problemTotal} (${safePercent(problemDone, problemTotal)}%)`;
-    }
+    legend.innerHTML = stats.map(function (topic) {
+      return `
+        <div class="flex items-center justify-between gap-3 text-xs text-gray-300">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="inline-block w-6 h-2 rounded-full border border-white/20 shrink-0" style="background: linear-gradient(90deg, ${topic.pastel}, ${topic.vibrant});"></span>
+            <span class="truncate">${topic.shortLabel}</span>
+          </div>
+          <span class="font-medium text-gray-200 shrink-0">${topic.done}/${topic.total} (${topic.percent}%)</span>
+        </div>
+      `;
+    }).join('');
   }
 
   function renderTasks(app) {
@@ -129,6 +129,6 @@
     renderTasks,
     updateFilterButtons,
     updateStats,
-    updateTypeProgress
+    updateTopicLegend
   };
 })();

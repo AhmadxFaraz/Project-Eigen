@@ -18,7 +18,7 @@
     <!-- Application Structure Plan: 
          The app is designed as a "Progress Dashboard". 
          1. Header: High-level course context and reset controls.
-         2. Analytics Section (Top): Visualizes progress immediately to motivate the user. Uses two Doughnut charts for overall completion and theory vs problem progress.
+         2. Analytics Section (Top): Visualizes progress immediately to motivate the user. Uses one Doughnut chart with topic-wise pastel-to-vibrant progress fill.
          3. Filter/Control Bar: Allows users to focus on what's left ("Incomplete") or review what's done.
          4. Topic Cards (Main Content): The syllabus is broken down into 5 distinct cards (Topics). Each card acts as a checklist container. 
             - Why Cards? They segment the dense list of problems into manageable chunks (Chunking Principle).
@@ -63,31 +63,20 @@
         <!-- Visualization Section -->
         <!-- Visualization & Content Choices:
              1. Overall Progress (Doughnut Chart): Goal -> Inform/Motivate. Shows 'Completed' vs 'Remaining' to give a quick sense of achievement.
-             2. Theory vs Problem Breakdown (Doughnut Chart): Goal -> Inform/Balance. Shows completion and remaining work split by theory and problem tasks.
+             2. Topic-Wise Progress (Doughnut Chart): Goal -> Inform/Engage. Each topic starts pale and turns vibrant as its tasks are completed.
              3. Interaction: Charts update in real-time as checkboxes are clicked.
              CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
         -->
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+        <section class="grid grid-cols-1 gap-6 mb-10">
             <!-- Progress Chart -->
             <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
-                <h3 class="text-gray-700 font-medium mb-4 w-full text-left border-b pb-2">Overall Completion</h3>
+                <h3 class="text-gray-700 font-medium mb-4 w-full text-left border-b pb-2">Topic-Wise Progress</h3>
                 <div class="chart-container">
                     <canvas id="progressChart"></canvas>
                 </div>
+                <div id="topic-progress-legend" class="mt-4 w-full space-y-2"></div>
                 <div id="motivation-text" class="mt-4 text-sm font-medium text-gray-500 text-center italic">
                     "Start where you are. Use what you have. Do what you can."
-                </div>
-            </div>
-
-            <!-- Theory vs Problem Chart -->
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
-                <h3 class="text-gray-700 font-medium mb-4 w-full text-left border-b pb-2">Theory vs Problem Progress</h3>
-                <div class="chart-container">
-                    <canvas id="mixChart"></canvas>
-                </div>
-                <div class="mt-4 w-full text-xs text-gray-400 text-center space-y-1">
-                    <p id="theory-progress-text">Theory: 0/0 (0%)</p>
-                    <p id="problem-progress-text">Problems: 0/0 (0%)</p>
                 </div>
             </div>
         </section>

@@ -226,8 +226,8 @@
       updateStats: function () {
         const stats = this.getCounts();
         window.TrackerUI.updateStats(stats.percent);
-        if (window.TrackerUI.updateTypeProgress && window.TrackerCharts.getTypeCounts) {
-          window.TrackerUI.updateTypeProgress(window.TrackerCharts.getTypeCounts(this.data));
+        if (window.TrackerUI.updateTopicLegend && window.TrackerCharts.getTopicStats) {
+          window.TrackerUI.updateTopicLegend(window.TrackerCharts.getTopicStats(this.data));
         }
       }
     };
