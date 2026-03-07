@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMS 2612: Unit 4 Interactive Study Plan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/theme.css?v=5" />
+    <link rel="stylesheet" href="../assets/css/unit-dashboard.css" />
+    <!-- Chosen Palette: Warm Neutral & Academic Blue - A soothing, focus-oriented palette using warm grays/creams for background and a trustworthy blue for primary actions, inspired by modern study apps. -->
+</head>
+<body class="theme-page about-bottom-left min-h-screen flex flex-col text-slate-100">
+
+    <canvas id="bgCanvas" data-bg-mode="particles" data-particle-count="130" data-particle-size="2.2" data-particle-speed="1" data-link-distance="120"></canvas>
+
+    <!-- Application Structure Plan: 
+         The app is designed as a "Progress Dashboard". 
+         1. Header: High-level course context and reset controls.
+         2. Analytics Section (Top): Visualizes progress immediately to motivate the user. Uses a Doughnut chart for overall completion and a Bar chart for topic-wise breakdown.
+         3. Filter/Control Bar: Allows users to focus on what's left ("Incomplete") or review what's done.
+         4. Topic Cards (Main Content): The syllabus is broken down into 5 distinct cards (Topics). Each card acts as a checklist container. 
+            - Why Cards? They segment the dense list of problems into manageable chunks (Chunking Principle).
+            - Why Checkboxes? Provide immediate gratification and tactile interaction.
+         5. Sticky Footer: Summary stats.
+         This structure transforms a static list of problems into a gamified, trackable workflow.
+    -->
+
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-20 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">AMS 2612: Unit 4</h1>
+                <p class="text-sm text-gray-500">Lecture Plan Tracker • AhmadxFaraz</p>
+                <a href="index.html" class="inline-block mt-2 text-xs mono text-cyan-300 hover:text-cyan-200 transition-colors">
+                    ← Back to Higher Mathematics
+                </a>
+            </div>
+            <div class="flex space-x-3">
+                <button onclick="app.resetProgress()" class="text-sm text-red-500 hover:text-red-700 font-medium transition-colors px-3 py-2 rounded hover:bg-red-50">
+                    Reset Progress
+                </button>
+                <div class="hidden sm:block text-right">
+                    <div class="text-xs text-gray-400 uppercase tracking-wide">Exam Readiness</div>
+                    <div id="header-percent" class="text-xl font-bold text-emerald-500">0%</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        
+        <!-- Intro Context -->
+        <section class="mb-8">
+            <div class="bg-blue-50 border-l-4 border-cyan-500 p-4 rounded-r-lg">
+                <h2 class="text-lg font-semibold text-blue-800 mb-1">Study Dashboard</h2>
+                <p class="text-blue-700 text-sm">
+                    Welcome to your interactive lecture plan. This dashboard breaks down your Unit IV syllabus into trackable tasks. 
+                    Use the checkboxes to mark progress on theory concepts and problem sets from <strong>J&I</strong> and <strong>Chandrika Prasad</strong>. 
+                    Your progress is visualized below to help you manage your preparation effectively.
+                </p>
+            </div>
+        </section>
+
+        <!-- Visualization Section -->
+        <!-- Visualization & Content Choices:
+             1. Overall Progress (Doughnut Chart): Goal -> Inform/Motivate. Shows 'Completed' vs 'Remaining' to give a quick sense of achievement.
+             2. Topic Breakdown (Bar Chart): Goal -> Compare/Organize. Shows the distribution of tasks across the 5 main topics and how much is done in each. Helps identify weak areas.
+             3. Interaction: Charts update in real-time as checkboxes are clicked.
+             CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+        -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+            <!-- Progress Chart -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
+                <h3 class="text-gray-700 font-medium mb-4 w-full text-left border-b pb-2">Overall Completion</h3>
+                <div class="chart-container">
+                    <canvas id="progressChart"></canvas>
+                </div>
+                <div id="motivation-text" class="mt-4 text-sm font-medium text-gray-500 text-center italic">
+                    "Start where you are. Use what you have. Do what you can."
+                </div>
+            </div>
+
+            <!-- Topic Breakdown Chart -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
+                <h3 class="text-gray-700 font-medium mb-4 w-full text-left border-b pb-2">Progress by Topic</h3>
+                <div class="chart-container">
+                    <canvas id="topicChart"></canvas>
+                </div>
+                <p class="mt-4 text-xs text-gray-400 text-center">
+                    Bars show total tasks vs. completed tasks per section.
+                </p>
+            </div>
+        </section>
+
+        <!-- Filters & Controls -->
+        <section class="flex flex-col sm:flex-row justify-between items-center mb-6 sticky top-20 z-10 bg-transparent py-2">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 sm:mb-0">Syllabus Topics</h2>
+            <div class="flex space-x-2 bg-white p-1 rounded-lg border border-gray-200 shadow-sm">
+                <button onclick="app.setFilter('all')" id="btn-all" class="px-4 py-2 text-sm font-medium rounded-md bg-blue-100 text-blue-700 transition-colors">All</button>
+                <button onclick="app.setFilter('incomplete')" id="btn-incomplete" class="px-4 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 transition-colors">To Do</button>
+                <button onclick="app.setFilter('completed')" id="btn-completed" class="px-4 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 transition-colors">Done</button>
+            </div>
+        </section>
+
+        <!-- Content Grid (Topic Cards) -->
+        <div id="topic-grid" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            <!-- Content will be injected here by JS -->
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-400 text-sm">
+            <p>Based on Unit 4 Lecture Plan</p>
+            <p class="mt-2">Use this tracker to prepare for your Exams systematically.</p>
+        </div>
+    </footer>
+
+    <script src="../assets/theme.js?v=4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../assets/js/supabase-config.js"></script>
+    <script src="../assets/js/supabase-client.js?v=7"></script>
+    <script src="../assets/js/modules/cloud-sync.js?v=7"></script>
+    <script src="../assets/js/modules/storage.js?v=7"></script>
+    <script src="../assets/js/modules/charts.js"></script>
+    <script src="../assets/js/modules/ui.js"></script>
+    <script src="../assets/js/modules/app-core.js?v=7"></script>
+    <script src="../assets/js/hm-unit-4.data.js"></script>
+    <script src="../assets/js/hm-unit-4.main.js"></script>
+</body>
+</html>
