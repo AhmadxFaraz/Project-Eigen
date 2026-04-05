@@ -268,6 +268,9 @@ body.theme-page section.max-w-6xl > a:nth-child(3) h3 { color: #c084fc !importan
 body.theme-page section.max-w-6xl > a:nth-child(4) h3 { color: #a78bfa !important; }
 body.theme-page section.max-w-6xl > a:nth-child(5) h3 { color: #fb923c !important; }
 body.theme-page section.max-w-6xl > a:nth-child(6) h3 { color: #2dd4bf !important; }
+body.theme-page section.max-w-6xl > a:nth-child(7) h3 { color: #fb7185 !important; }
+body.theme-page section.max-w-6xl > a:nth-child(8) h3 { color: #67e8f9 !important; }
+body.theme-page section.max-w-6xl > a:nth-child(9) h3 { color: #fb923c !important; }
 
 /* Distinct heading colors for unit cards on subject index pages. */
 body.theme-page section.max-w-5xl > a:nth-child(1) h3 { color: #60a5fa !important; }

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Economics & Game Theory | Project Eigen</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/theme.css?v=5" />
+  <link rel="stylesheet" href="../assets/css/egt-track.css?v=1" />
+</head>
+<body class="theme-page text-slate-100">
+
+<canvas id="bgCanvas" data-bg-mode="particles" data-particle-count="130" data-particle-size="2.2" data-particle-speed="1" data-link-distance="120"></canvas>
+
+<header class="relative px-4 pt-10 pb-8">
+  <a href="../login.html" class="absolute top-4 right-4 inline-block text-xs mono text-[#e5e7eb] hover:text-white border border-white/25 hover:border-white/40 rounded-md px-3 py-1 bg-[rgba(12,12,12,0.62)] backdrop-blur-[1px] transition-colors" data-auth-link data-default-label="Sign In / Sign Up">
+    Sign In / Sign Up
+  </a>
+
+  <div class="max-w-7xl mx-auto">
+    <div class="inline-flex items-center gap-2 rounded-full border border-orange-400/25 bg-orange-500/10 px-3 py-1 text-[11px] uppercase tracking-[0.26em] mono text-orange-300">
+      <span class="w-2 h-2 rounded-full bg-orange-300"></span>
+      Real-World Track
+    </div>
+
+    <h1 class="mt-4 text-4xl md:text-6xl font-extrabold tracking-tight gradient-heading">
+      Economics &amp; Game Theory
+    </h1>
+    <p class="mt-4 max-w-3xl text-slate-300 mono text-sm md:text-base leading-7">
+      Where math meets human irrationality. This track turns economic models, strategic behavior, finance, and uncertainty
+      into something you can actually study, connect, and track.
+    </p>
+
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href="../index.html" class="animated-border glow px-5 py-2 text-sm mono transition duration-300">
+        ← Back to Dashboard
+      </a>
+      <button id="reset-track-btn" class="egt-secondary-btn mono text-sm">
+        Reset Progress
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+  <section class="grid gap-6 lg:grid-cols-[1.45fr_0.9fr] mb-8">
+    <div class="animated-border p-6">
+      <p class="mono text-xs uppercase tracking-[0.28em] text-cyan-300">Track Summary</p>
+      <h2 class="mt-3 text-2xl font-bold text-white">Not just theory. A map of where the math is actually used.</h2>
+      <p class="mt-4 text-slate-300 leading-7">
+        Instead of dumping chapter names, this page is organized as <span class="text-white font-semibold">Topic → Subtopics → Use Case → Math Used</span>.
+        That makes it useful for revision, meaningful for recruiters, and honest about how economics actually leans on probability, optimization,
+        graph models, and decision theory.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-2">
+        <span class="egt-chip">Game Theory</span>
+        <span class="egt-chip">Behavioral Economics</span>
+        <span class="egt-chip">Finance</span>
+        <span class="egt-chip">Optimization</span>
+        <span class="egt-chip">Decision Theory</span>
+        <span class="egt-chip">Network Effects</span>
+      </div>
+    </div>
+
+    <div class="animated-border p-6">
+      <p class="mono text-xs uppercase tracking-[0.28em] text-amber-300">Why It Matters</p>
+      <div class="mt-4 space-y-4 text-sm text-slate-300 leading-6">
+        <p>Learn why people cooperate, compete, overreact, and price things the way they do.</p>
+        <p>Connect classroom math to markets, auctions, product strategy, cricket tactics, and negotiation.</p>
+        <p>Build a track that looks less like a forgotten PDF and more like an actual thinking system.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 mb-8" id="egt-stats">
+    <div class="animated-border p-5">
+      <p class="mono text-xs uppercase tracking-[0.22em] text-cyan-300">Topics Covered</p>
+      <p class="mt-3 text-3xl font-bold text-white" id="stat-total-topics">0</p>
+      <p class="mt-2 text-sm text-slate-400">Structured ideas across ten thematic sections.</p>
+    </div>
+    <div class="animated-border p-5">
+      <p class="mono text-xs uppercase tracking-[0.22em] text-emerald-300">Completed</p>
+      <p class="mt-3 text-3xl font-bold text-white" id="stat-completed-topics">0</p>
+      <p class="mt-2 text-sm text-slate-400">Checkpoints you have already closed.</p>
+    </div>
+    <div class="animated-border p-5">
+      <p class="mono text-xs uppercase tracking-[0.22em] text-amber-300">Section Progress</p>
+      <p class="mt-3 text-3xl font-bold text-white" id="stat-completed-sections">0</p>
+      <p class="mt-2 text-sm text-slate-400">Sections fully covered from start to finish.</p>
+    </div>
+    <div class="animated-border p-5">
+      <p class="mono text-xs uppercase tracking-[0.22em] text-rose-300">Track State</p>
+      <p class="mt-3 text-3xl font-bold text-white" id="stat-percent">0%</p>
+      <p class="mt-2 text-sm text-slate-400" id="egt-motivation">Structure begins before progress does.</p>
+    </div>
+  </section>
+
+  <section class="animated-border p-5 mb-8">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <p class="mono text-xs uppercase tracking-[0.22em] text-cyan-300">Featured Use Cases</p>
+        <p class="mt-2 text-sm text-slate-300">Uber surge pricing, ad auctions, cricket strategy, negotiations, and market behavior.</p>
+      </div>
+      <div id="featured-application-strip" class="flex flex-wrap gap-2"></div>
+    </div>
+  </section>
+
+  <section class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+    <div>
+      <h2 class="text-2xl font-bold text-white">Track Sections</h2>
+      <p class="text-sm text-slate-400 mt-1">Filter the track to focus on what is still left or review what is already done.</p>
+    </div>
+    <div class="egt-filter-shell">
+      <button id="btn-all" class="egt-filter-btn">All</button>
+      <button id="btn-incomplete" class="egt-filter-btn">To Do</button>
+      <button id="btn-completed" class="egt-filter-btn">Done</button>
+    </div>
+  </section>
+
+  <section id="egt-sections" class="space-y-8"></section>
+</main>
+
+<script src="../assets/theme.js?v=4"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script src="../assets/js/supabase-client.js?v=7"></script>
+<script src="../assets/js/modules/cloud-sync.js?v=7"></script>
+<script src="../assets/js/modules/storage.js?v=7"></script>
+<script src="../assets/js/modules/header-auth.js"></script>
+<script src="../assets/js/egt-track.data.js?v=1"></script>
+<script src="../assets/js/egt-track.main.js?v=1"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){window.HeaderAuth.initHeaderAuth();});</script>
+
+</body>
+</html>
