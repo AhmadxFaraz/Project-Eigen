@@ -19,53 +19,83 @@
 
 /* Unify all unit pages to match the homepage glass + neon design language. */
 body.theme-page header.bg-white {
-  background: rgba(10, 10, 10, 0.76) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.16) !important;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45) !important;
-  backdrop-filter: blur(4px);
+  background:
+    linear-gradient(180deg, rgba(18, 18, 28, 0.92), rgba(9, 10, 17, 0.9)) !important;
+  border-bottom: 1px solid rgba(245, 199, 112, 0.14) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.46) !important;
+  backdrop-filter: blur(8px);
 }
 
 body.theme-page header.bg-white h1.text-gray-800 {
   color: transparent !important;
-  background-image: linear-gradient(90deg, #60a5fa 0%, #c084fc 48%, #e2e8f0 100%);
+  background-image: linear-gradient(100deg, #fbf7e9 0%, #b9b0ff 36%, #9d8cff 66%, #f5c770 100%);
   -webkit-background-clip: text;
   background-clip: text;
 }
 
 body.theme-page header.bg-white p.text-gray-500 {
-  color: #cbd5e1 !important;
+  color: #d5ceff !important;
 }
 
 body.theme-page header.bg-white a {
-  color: #60a5fa !important;
+  color: #f5c770 !important;
 }
 
 body.theme-page main .bg-blue-50 {
-  background: linear-gradient(160deg, rgba(20, 20, 20, 0.84), rgba(8, 8, 8, 0.7)) !important;
-  border: 1px solid rgba(255, 255, 255, 0.16) !important;
-  border-left-color: rgba(96, 165, 250, 0.7) !important;
+  background:
+    radial-gradient(circle at top right, rgba(142, 130, 255, 0.08), transparent 30%),
+    linear-gradient(160deg, rgba(20, 20, 30, 0.88), rgba(8, 8, 14, 0.76)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-left-color: rgba(245, 199, 112, 0.76) !important;
   border-left-width: 3px !important;
   border-radius: 0.85rem !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 12px 30px rgba(0, 0, 0, 0.45) !important;
+    0 14px 34px rgba(0, 0, 0, 0.46) !important;
+}
+
+body.theme-page main .bg-white.p-6.rounded-xl {
+  background:
+    radial-gradient(circle at top right, rgba(142, 130, 255, 0.08), transparent 28%),
+    linear-gradient(165deg, rgba(18, 19, 30, 0.9), rgba(8, 8, 14, 0.86)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-left: 3px solid rgba(142, 130, 255, 0.42) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 16px 36px rgba(0, 0, 0, 0.42) !important;
 }
 
 body.theme-page main section.sticky {
-  backdrop-filter: blur(3px);
-}
-
-body.theme-page main section.sticky > div {
-  background: rgba(12, 12, 12, 0.78) !important;
-  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  padding-top: 0.55rem;
+  padding-bottom: 0.55rem;
+  border-radius: 1rem;
+  background: rgba(13, 12, 20, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 10px 24px rgba(0, 0, 0, 0.4) !important;
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 10px 24px rgba(0, 0, 0, 0.28) !important;
+  backdrop-filter: blur(10px);
 }
 
 body.theme-page #topic-grid > div {
-  background: linear-gradient(165deg, rgba(20, 20, 20, 0.62), rgba(8, 8, 8, 0.54));
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-left: 3px solid rgba(245, 199, 112, 0.26);
+  background:
+    radial-gradient(circle at top right, rgba(142, 130, 255, 0.08), transparent 28%),
+    linear-gradient(165deg, rgba(18, 19, 30, 0.92), rgba(8, 8, 14, 0.88));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 16px 36px rgba(0, 0, 0, 0.42);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+body.theme-page #topic-grid > div:hover {
+  transform: translateY(-3px);
+  border-color: rgba(245, 199, 112, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 18px 40px rgba(0, 0, 0, 0.46),
+    0 0 28px rgba(142, 130, 255, 0.06);
 }
 
 body.theme-page #topic-grid > div .h-2 {
@@ -73,7 +103,7 @@ body.theme-page #topic-grid > div .h-2 {
 }
 
 body.theme-page #topic-grid > div h3 {
-  color: #f8fafc !important;
+  color: #dcd2ff !important;
 }
 
 body.theme-page #topic-grid > div .text-gray-500 {
@@ -92,9 +122,24 @@ body.theme-page #topic-grid > div .group-hover\:text-gray-900:hover {
   color: #ffffff !important;
 }
 
+body.theme-page .task-checkbox {
+  accent-color: #f5c770;
+}
+
+body.theme-page main section.sticky .bg-white {
+  background: rgba(17, 16, 28, 0.82) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+body.theme-page main section.sticky .bg-blue-100 {
+  background: linear-gradient(135deg, rgba(142, 130, 255, 0.16), rgba(245, 199, 112, 0.14)) !important;
+  color: #fff7df !important;
+}
+
 body.theme-page footer.bg-white {
-  background: rgba(8, 8, 8, 0.76) !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.16) !important;
+  background: rgba(9, 9, 16, 0.82) !important;
+  border-top: 1px solid rgba(245, 199, 112, 0.12) !important;
   box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.4) !important;
 }
 

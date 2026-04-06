@@ -1,16 +1,16 @@
 .egt-secondary-btn {
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(245, 199, 112, 0.18);
   border-radius: 0.85rem;
   padding: 0.6rem 1rem;
-  background: rgba(14, 14, 14, 0.58);
+  background: rgba(20, 18, 28, 0.72);
   color: #f8fafc;
   transition: all 0.25s ease;
 }
 
 .egt-secondary-btn:hover {
   transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.42);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.42), 0 0 24px rgba(255, 255, 255, 0.08);
+  border-color: rgba(245, 199, 112, 0.36);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.42), 0 0 24px rgba(142, 130, 255, 0.08);
 }
 
 .egt-chip {
@@ -18,9 +18,9 @@
   align-items: center;
   gap: 0.35rem;
   border-radius: 999px;
-  border: 1px solid rgba(125, 211, 252, 0.22);
-  background: rgba(59, 130, 246, 0.11);
-  color: #bfdbfe;
+  border: 1px solid rgba(245, 199, 112, 0.16);
+  background: rgba(142, 130, 255, 0.12);
+  color: #ddd4ff;
   padding: 0.35rem 0.8rem;
   font-size: 0.75rem;
   line-height: 1rem;
@@ -31,9 +31,10 @@
   gap: 0.35rem;
   padding: 0.35rem;
   border-radius: 0.95rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(3px);
+  background: rgba(17, 16, 28, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
 }
 
 .egt-filter-btn {
@@ -46,10 +47,10 @@
 }
 
 .egt-filter-btn.is-active {
-  background: rgba(255, 255, 255, 0.14);
+  background: linear-gradient(135deg, rgba(142, 130, 255, 0.18), rgba(245, 199, 112, 0.15));
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(245, 199, 112, 0.22);
+  box-shadow: 0 0 20px rgba(142, 130, 255, 0.08);
 }
 
 .egt-section-grid {
@@ -66,11 +67,13 @@
 .egt-section-card {
   border-radius: 1.25rem;
   overflow: hidden;
+  border-left: 3px solid rgba(245, 199, 112, 0.28);
 }
 
 .egt-section-header {
   padding: 1.15rem 1.25rem 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(142, 130, 255, 0.08), rgba(0, 0, 0, 0));
 }
 
 .egt-section-body {
@@ -92,14 +95,23 @@
   position: relative;
   border-radius: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(11, 11, 11, 0.64);
+  background:
+    radial-gradient(circle at top right, rgba(142, 130, 255, 0.08), transparent 28%),
+    rgba(11, 11, 17, 0.74);
   padding: 1rem;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 12px 24px rgba(0, 0, 0, 0.28);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.egt-topic-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(245, 199, 112, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 16px 28px rgba(0, 0, 0, 0.32), 0 0 24px rgba(142, 130, 255, 0.06);
 }
 
 .egt-topic-card.is-complete {
-  border-color: rgba(45, 212, 191, 0.25);
-  background: linear-gradient(180deg, rgba(11, 11, 11, 0.7), rgba(18, 35, 31, 0.64));
+  border-color: rgba(245, 199, 112, 0.22);
+  background: linear-gradient(180deg, rgba(19, 18, 26, 0.88), rgba(35, 28, 16, 0.72));
 }
 
 .egt-topic-meta {
@@ -126,18 +138,18 @@
 .egt-math-chip {
   border-radius: 999px;
   padding: 0.28rem 0.68rem;
-  background: rgba(249, 115, 22, 0.12);
-  border: 1px solid rgba(249, 115, 22, 0.18);
-  color: #fdba74;
+  background: rgba(245, 199, 112, 0.14);
+  border: 1px solid rgba(245, 199, 112, 0.18);
+  color: #f4dbac;
   font-size: 0.75rem;
 }
 
 .egt-linked-chip {
   border-radius: 999px;
   padding: 0.28rem 0.68rem;
-  background: rgba(168, 85, 247, 0.12);
-  border: 1px solid rgba(168, 85, 247, 0.18);
-  color: #d8b4fe;
+  background: rgba(142, 130, 255, 0.12);
+  border: 1px solid rgba(142, 130, 255, 0.18);
+  color: #d8d1ff;
   font-size: 0.75rem;
 }
 
@@ -146,11 +158,11 @@
   text-transform: uppercase;
   letter-spacing: 0.18em;
   font-family: 'JetBrains Mono', monospace;
-  color: #94a3b8;
+  color: #b1abcf;
 }
 
 .egt-topic-toggle {
-  accent-color: #fb923c;
+  accent-color: #f5c770;
   width: 1rem;
   height: 1rem;
   margin-top: 0.15rem;
