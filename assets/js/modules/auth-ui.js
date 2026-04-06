@@ -148,7 +148,16 @@
   }
 
   function hasRecoveryHint(params) {
-    return params.type === 'recovery' || Boolean(params.accessToken || params.recoveryToken);
+    return params.type === 'recovery' || Boolean(params.recoveryToken);
+  }
+
+  function hasSignupConfirmationHint(params) {
+    return params.type === 'signup';
+  }
+
+  function clearAuthUrl(notice) {
+    const nextUrl = notice ? `${window.location.pathname}?notice=${notice}` : window.location.pathname;
+    window.history.replaceState({}, document.title, nextUrl);
   }
 
   function getStatusFromNotice(params) {
@@ -162,6 +171,13 @@
     if (params.notice === 'password_changed') {
       return {
         text: 'Password changed successfully. Please sign in with your new password.',
+        isError: false
+      };
+    }
+
+    if (params.notice === 'signup_confirmed') {
+      return {
+        text: 'Email confirmed successfully. Your account is now active.',
         isError: false
       };
     }
@@ -285,7 +301,11 @@
   function getSignupRedirectUrl() {
     const explicit = String(window.SUPABASE_SIGNUP_REDIRECT_URL || '').trim();
     if (explicit) return explicit;
-    return getPasswordResetRedirectUrl();
+    try {
+      return new URL('signup.html', window.location.href).toString();
+    } catch (_) {
+      return `${window.location.origin}/signup.html`;
+    }
   }
 
   async function updatePassword(newPassword) {
@@ -370,6 +390,7 @@
 
     const authParams = parseAuthParams();
     const recoveryHint = hasRecoveryHint(authParams);
+    const signupConfirmationHint = hasSignupConfirmationHint(authParams);
     let recoveryMode = false;
 
     function setLoginModeUi() {
@@ -499,6 +520,18 @@
       return;
     }
 
+    if (signupConfirmationHint) {
+      await refreshUserView(client);
+      clearAuthUrl('signup_confirmed');
+      const confirmedUser = await getCurrentUser(client);
+      if (confirmedUser) {
+        setStatus('Email confirmed successfully. Your account is now active.');
+      } else {
+        setStatus('Email confirmed successfully. Please sign in.', false);
+      }
+      return;
+    }
+
     setLoginModeUi();
     await refreshUserView(client);
     if (noticeStatus) {
@@ -516,6 +549,9 @@
     const signOutBtn = document.getElementById('signout-btn');
 
     if (!form || !signUpBtn || !signOutBtn) return;
+
+    const authParams = parseAuthParams();
+    const signupConfirmationHint = hasSignupConfirmationHint(authParams);
 
     async function submitSignUp() {
       const fullName = (document.getElementById('full-name') || { value: '' }).value.trim();
@@ -568,7 +604,12 @@
       refreshUserView(client);
     });
 
-    refreshUserView(client);
+    await refreshUserView(client);
+
+    if (signupConfirmationHint) {
+      clearAuthUrl('signup_confirmed');
+      setStatus('Email confirmed successfully. Your account is now active.');
+    }
   }
 
   async function initAccountSecurityPage() {
